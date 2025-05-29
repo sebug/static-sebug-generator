@@ -6,6 +6,7 @@
     <RootNamespace>static_sebug_generator</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>cea945c3-643a-42ec-8833-696ece6f8684</UserSecretsId>
   </PropertyGroup>
 
 </Project>
