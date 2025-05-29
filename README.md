@@ -7,3 +7,4 @@ would also go there.
 
       dotnet user-secrets set "StaticSebugGenerator:SourceDirectory" /home/me/blog
 
+The page is composed of an 

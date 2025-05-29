@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using StaticSebugGenerator;
 
 var config = new ConfigurationBuilder()
 .AddUserSecrets<Program>()
