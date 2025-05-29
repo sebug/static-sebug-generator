@@ -15,17 +15,20 @@ public record BlogEntriesReader
         }
         var yearRegex = new Regex("\\d{4}");
         var years = Directory.GetDirectories(archivesFolder)
-            .Where(f => yearRegex.IsMatch(Path.GetFileName(f) ?? String.Empty));
+            .Where(f => yearRegex.IsMatch(Path.GetFileName(f) ?? String.Empty))
+            .Order();
         var monthRegex = new Regex("\\d{2}");
         var dayFileRegex = new Regex("(\\d{2})\\.html");
         foreach (var year in years)
         {
             var months = Directory.EnumerateDirectories(year)
-            .Where(f => monthRegex.IsMatch(Path.GetFileName(f)));
+            .Where(f => monthRegex.IsMatch(Path.GetFileName(f)))
+            .Order();
             foreach (var month in months)
             {
                 var days = Directory.EnumerateFiles(month)
-                .Where(f => dayFileRegex.IsMatch(Path.GetFileName(f)));
+                .Where(f => dayFileRegex.IsMatch(Path.GetFileName(f)))
+                .Order();
                 foreach (var day in days)
                 {
                     var dayMatch = dayFileRegex.Match(Path.GetFileName(day));
