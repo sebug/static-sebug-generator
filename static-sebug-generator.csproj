@@ -9,4 +9,9 @@
     <UserSecretsId>cea945c3-643a-42ec-8833-696ece6f8684</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.5" />
+  </ItemGroup>
+
 </Project>
