@@ -7,4 +7,5 @@ would also go there.
 
       dotnet user-secrets set "StaticSebugGenerator:SourceDirectory" /home/me/blog
 
-The page is composed of an 
+The page is composed of main part, a heading and a navbar. Once I generate the static content I may start using CSS Grid.
+

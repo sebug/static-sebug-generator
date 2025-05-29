@@ -1,6 +1,7 @@
 namespace StaticSebugGenerator;
 
-public record StaticSebugGeneratorOptions(string SourceDirectory)
+public record StaticSebugGeneratorOptions(string SourceDirectory,
+    string TargetDirectory)
 {
 
 }
