@@ -11,12 +11,14 @@ public record Generator(StaticSebugGeneratorOptions Settings)
 
         var templateContent = await TemplateContent.GetFromSourceDirectory(Settings.SourceDirectory);
         var navContent = await NavContent.GetFromSourceDirectory(Settings.SourceDirectory);
-        var outputGenerator = new OutputGenerator(templateContent, navContent);
+        var outputGenerator = new OutputGenerator(templateContent, navContent,
+            Settings.TargetDirectory);
 
         await foreach (var entry in entries)
         {
             readBlogEntries.Add(entry);
-            Console.WriteLine(entry.Date.ToString() + " - " + entry.Title);
+            var generatedOutput = outputGenerator.GenerateIndividualBlogEntry(entry);
+            Console.WriteLine(generatedOutput.FilePath);
         }
     }
 }
