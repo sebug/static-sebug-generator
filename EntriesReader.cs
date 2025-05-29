@@ -63,7 +63,7 @@ public record BlogEntriesReader
             throw new Exception("Expected date part of blog entry title but got " + h2.InnerHtml);
         }
         return new BlogEntry(Date: date,
-        Title: h2.InnerHtml.Substring(colonIndex).Trim(),
+        Title: h2.InnerHtml.Substring(colonIndex + 1).Trim(),
         Content: content,
         FilePath: path);
     }
