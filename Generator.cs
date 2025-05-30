@@ -12,13 +12,23 @@ public record Generator(StaticSebugGeneratorOptions Settings)
         var templateContent = await TemplateContent.GetFromSourceDirectory(Settings.SourceDirectory);
         var navContent = await NavContent.GetFromSourceDirectory(Settings.SourceDirectory);
         var outputGenerator = new OutputGenerator(templateContent, navContent,
-            Settings.TargetDirectory);
+            Settings.TargetDirectory, Settings.PageTitle);
 
         await foreach (var entry in entries)
         {
             readBlogEntries.Add(entry);
             var generatedOutput = outputGenerator.GenerateIndividualBlogEntry(entry);
-            Console.WriteLine(generatedOutput.FilePath);
+            generatedOutputs.Add(generatedOutput);
+        }
+
+        var generatedOutputWriter = new GeneratedOutputWriter(Settings.TargetDirectory);
+        foreach (var generatedOutput in generatedOutputs)
+        {
+            var (outputAfter, didChange) = await generatedOutputWriter.Write(generatedOutput);
+            if (didChange)
+            {
+                Console.WriteLine(outputAfter.FilePath);
+            }
         }
     }
 }
