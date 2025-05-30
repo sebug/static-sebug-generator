@@ -26,7 +26,7 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
         {
             throw new Exception("Expected h1 node to exist");
         }
-        h1Node.InnerHtml = PageTitle;
+        h1Node.InnerHtml = "<a href=\"/\">" + PageTitle + "</a>";
 
         var navNode = doc.DocumentNode.Descendants("nav").FirstOrDefault();
         if (navNode == null)
