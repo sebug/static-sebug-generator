@@ -5,7 +5,9 @@ namespace StaticSebugGenerator;
 public record OutputGenerator(TemplateContent TemplateContent, NavContent NavContent,
     string OutputDirectory, string PageTitle)
 {
-    public GeneratedOutput GenerateIndividualBlogEntry(BlogEntry blogEntry)
+    public GeneratedOutput GenerateIndividualBlogEntry(BlogEntry blogEntry,
+        BlogEntry? previousEntry,
+        BlogEntry? nextEntry)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(TemplateContent.Content);
