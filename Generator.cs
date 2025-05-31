@@ -58,6 +58,7 @@ public record Generator(StaticSebugGeneratorOptions Settings)
             bool hasNewerPage = descendingBlogEntries.Count > entriesPerPage && i > 0;
             var generatedOutput = outputGenerator.GenerateLinearGroupedPage(pageNumber,
             linearEntries, hasOlderPage, hasNewerPage);
+            generatedOutputs.Add(generatedOutput);
         }
 
         var generatedOutputWriter = new GeneratedOutputWriter(Settings.TargetDirectory);
