@@ -47,6 +47,19 @@ public record Generator(StaticSebugGeneratorOptions Settings)
             generatedOutputs.Add(generatedOutput);
         }
 
+        // Now, create the linear archive - 5 entries per pag
+        var descendingBlogEntries = readBlogEntries.OrderByDescending(entry => entry.Date).ToList();
+        int entriesPerPage = 5;
+        int pageNumber = 1;
+        for (int i = 0; i < descendingBlogEntries.Count; i += entriesPerPage, pageNumber += 1)
+        {
+            var linearEntries = descendingBlogEntries.Skip(i).Take(entriesPerPage).ToList();
+            bool hasOlderPage = i + entriesPerPage < descendingBlogEntries.Count;
+            bool hasNewerPage = descendingBlogEntries.Count > entriesPerPage && i > 0;
+            var generatedOutput = outputGenerator.GenerateLinearGroupedPage(pageNumber,
+            linearEntries, hasOlderPage, hasNewerPage);
+        }
+
         var generatedOutputWriter = new GeneratedOutputWriter(Settings.TargetDirectory);
         foreach (var generatedOutput in generatedOutputs)
         {

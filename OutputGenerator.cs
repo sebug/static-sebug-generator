@@ -75,4 +75,77 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
 
         return new GeneratedOutput(outputPath, doc.DocumentNode.OuterHtml);
     }
+
+    public GeneratedOutput GenerateLinearGroupedPage(int pageNumber, List<BlogEntry> entries, bool hasOlder,
+        bool hasNewer)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(TemplateContent.Content);
+
+        var title = PageTitle + (pageNumber > 1 ? (" &mdash; Page " + pageNumber) : String.Empty);
+
+        var titleNode = doc.DocumentNode.Descendants("title").FirstOrDefault();
+        if (titleNode == null)
+        {
+            throw new Exception("Could not find title node");
+        }
+        titleNode.InnerHtml = title;
+
+        var h1Node = doc.DocumentNode.Descendants("h1").FirstOrDefault();
+        if (h1Node == null)
+        {
+            throw new Exception("Expected h1 node to exist");
+        }
+        h1Node.InnerHtml = "<a href=\"/\">" + PageTitle + "</a>";
+
+        var navNode = doc.DocumentNode.Descendants("nav").FirstOrDefault();
+        if (navNode == null)
+        {
+            throw new Exception("Expected nav node but did not find it");
+        }
+        navNode.InnerHtml = NavContent.Content;
+
+        var mainNode = doc.DocumentNode.Descendants("main").FirstOrDefault();
+        if (mainNode == null)
+        {
+            throw new Exception("Main node not found");
+        }
+
+        mainNode.InnerHtml = String.Join(Environment.NewLine, entries.OrderByDescending(entry => entry.Date));
+
+        var sb = new StringBuilder();
+        sb.Append("<p class=\"entries-navigation\">");
+        if (hasOlder)
+        {
+            sb.AppendLine("<a href=\"prev\" href=\"/" + (pageNumber + 1) +
+                "/\">Older Entries</a>");
+            if (hasNewer)
+            {
+                sb.AppendLine(" / ");
+            }
+        }
+        if (hasNewer)
+        {
+            if (pageNumber > 2)
+            {
+                sb.AppendLine("<a href=\"next\" href=\"/" + (pageNumber - 1) +
+                "/\">Newer Entries</a>");
+            }
+        }
+        sb.AppendLine("<a href=\"next\" href=\"/\">Latest Entries</a>");
+        sb.Append("</p>");
+        mainNode.InnerHtml += sb.ToString();
+
+        string outputPath;
+        if (pageNumber == 1)
+        {
+            outputPath = Path.Combine(OutputDirectory, "index.html");
+        }
+        else
+        {
+            outputPath = Path.Combine(OutputDirectory, pageNumber.ToString(), "index.html");
+        }
+
+        return new GeneratedOutput(outputPath, doc.DocumentNode.OuterHtml);
+    }
 }
