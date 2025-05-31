@@ -1,3 +1,4 @@
+using System.Text;
 using HtmlAgilityPack;
 
 namespace StaticSebugGenerator;
@@ -43,6 +44,28 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
             throw new Exception("Main node not found");
         }
         mainNode.InnerHtml = blogEntry.Content;
+
+        if (previousEntry != null || nextEntry != null)
+        {
+            var sb = new StringBuilder();
+            sb.Append("<p class=\"entries-navigation\">");
+            if (previousEntry != null)
+            {
+                sb.AppendLine("<a href=\"prev\" href=\"/" + previousEntry.Date.ToString("yyyy/MM/dd") +
+                    "/\">Previous: " + previousEntry.Title + "</a>");
+                if (nextEntry != null)
+                {
+                    sb.AppendLine(" / ");
+                }
+            }
+            if (nextEntry != null)
+            {
+                sb.AppendLine("<a href=\"next\" href=\"/" + nextEntry.Date.ToString("yyyy/MM/dd") +
+                    "/\">Next: " + nextEntry.Title + "</a>");
+            }
+            sb.Append("</p>");
+            mainNode.InnerHtml += sb.ToString();
+        }
 
         string outputPath = Path.Combine(OutputDirectory,
         blogEntry.Date.Year.ToString(),
