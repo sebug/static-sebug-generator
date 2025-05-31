@@ -147,8 +147,8 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
                 sb.AppendLine("<a rel=\"next\" href=\"/" + (pageNumber - 1) +
                 "/\">Newer Entries</a>");
             }
+            sb.AppendLine("<a href=\"/\">Latest Entries</a>");
         }
-        sb.AppendLine("<a href=\"/\">Latest Entries</a>");
         sb.Append("</p>");
         mainNode.InnerHtml += sb.ToString();
 
