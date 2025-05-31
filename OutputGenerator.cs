@@ -45,27 +45,26 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
         }
         mainNode.InnerHtml = blogEntry.Content;
 
-        if (previousEntry != null || nextEntry != null)
+
+        var sb = new StringBuilder();
+        sb.Append("<p class=\"entries-navigation\">");
+        if (previousEntry != null)
         {
-            var sb = new StringBuilder();
-            sb.Append("<p class=\"entries-navigation\">");
-            if (previousEntry != null)
-            {
-                sb.AppendLine("<a href=\"prev\" href=\"/" + previousEntry.Date.ToString("yyyy/MM/dd") +
-                    "/\">Previous: " + previousEntry.Title + "</a>");
-                if (nextEntry != null)
-                {
-                    sb.AppendLine(" / ");
-                }
-            }
+            sb.AppendLine("<a rel=\"prev\" href=\"/" + previousEntry.Date.ToString("yyyy/MM/dd") +
+                "/\">Previous: " + previousEntry.Title + "</a>");
             if (nextEntry != null)
             {
-                sb.AppendLine("<a href=\"next\" href=\"/" + nextEntry.Date.ToString("yyyy/MM/dd") +
-                    "/\">Next: " + nextEntry.Title + "</a>");
+                sb.AppendLine(" / ");
             }
-            sb.Append("</p>");
-            mainNode.InnerHtml += sb.ToString();
         }
+        if (nextEntry != null)
+        {
+            sb.AppendLine("<a rel=\"next\" href=\"/" + nextEntry.Date.ToString("yyyy/MM/dd") +
+                "/\">Next: " + nextEntry.Title + "</a>");
+        }
+        sb.AppendLine("<a href=\"/\">Latest Entries</a>");
+        sb.Append("</p>");
+        mainNode.InnerHtml += sb.ToString();
 
         string outputPath = Path.Combine(OutputDirectory,
         blogEntry.Date.Year.ToString(),
@@ -115,11 +114,26 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
             .OrderByDescending(entry => entry.Date)
             .Select(entry => entry.Content));
 
+        var h2s = mainNode.Descendants("h2").ToList();
+        foreach (var h2 in h2s)
+        {
+            var correspodingBlogEntry =
+                entries.FirstOrDefault(entry => h2.InnerHtml.Contains(
+                    entry.Date.ToString("yyyy-MM-dd")));
+
+            if (correspodingBlogEntry != null)
+            {
+                h2.InnerHtml = "<a href=\"/" + correspodingBlogEntry.Date
+                    .ToString("yyyy/MM/dd") + "/\">" +
+                    h2.InnerHtml + "</a>";
+            }
+        }
+
         var sb = new StringBuilder();
         sb.Append("<p class=\"entries-navigation\">");
         if (hasOlder)
         {
-            sb.AppendLine("<a href=\"prev\" href=\"/" + (pageNumber + 1) +
+            sb.AppendLine("<a rel=\"prev\" href=\"/" + (pageNumber + 1) +
                 "/\">Older Entries</a>");
             if (hasNewer)
             {
@@ -130,11 +144,11 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
         {
             if (pageNumber > 2)
             {
-                sb.AppendLine("<a href=\"next\" href=\"/" + (pageNumber - 1) +
+                sb.AppendLine("<a rel=\"next\" href=\"/" + (pageNumber - 1) +
                 "/\">Newer Entries</a>");
             }
         }
-        sb.AppendLine("<a href=\"next\" href=\"/\">Latest Entries</a>");
+        sb.AppendLine("<a href=\"/\">Latest Entries</a>");
         sb.Append("</p>");
         mainNode.InnerHtml += sb.ToString();
 
