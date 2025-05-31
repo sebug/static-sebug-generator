@@ -50,7 +50,7 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
         sb.Append("<p class=\"entries-navigation\">");
         if (previousEntry != null)
         {
-            sb.AppendLine("<a rel=\"prev\" href=\"/" + previousEntry.Date.ToString("yyyy/MM/dd") +
+            sb.AppendLine("<a rel=\"prev\" href=\"/" + previousEntry.Date.ToString("yyyy-MM-dd").Replace("-", "/") +
                 "/\">Previous: " + previousEntry.Title + "</a>");
             if (nextEntry != null)
             {
@@ -59,7 +59,7 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
         }
         if (nextEntry != null)
         {
-            sb.AppendLine("<a rel=\"next\" href=\"/" + nextEntry.Date.ToString("yyyy/MM/dd") +
+            sb.AppendLine("<a rel=\"next\" href=\"/" + nextEntry.Date.ToString("yyyy-MM-dd").Replace("-", "/") +
                 "/\">Next: " + nextEntry.Title + "</a>");
         }
         sb.AppendLine("<a href=\"/\">Latest Entries</a>");
@@ -124,7 +124,7 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
             if (correspodingBlogEntry != null)
             {
                 h2.InnerHtml = "<a href=\"/" + correspodingBlogEntry.Date
-                    .ToString("yyyy/MM/dd") + "/\">" +
+                    .ToString("yyyy-MM-dd").Replace("-", "/") + "/\">" +
                     h2.InnerHtml + "</a>";
             }
         }
