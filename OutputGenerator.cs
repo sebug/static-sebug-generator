@@ -111,7 +111,9 @@ public record OutputGenerator(TemplateContent TemplateContent, NavContent NavCon
             throw new Exception("Main node not found");
         }
 
-        mainNode.InnerHtml = String.Join(Environment.NewLine, entries.OrderByDescending(entry => entry.Date));
+        mainNode.InnerHtml = String.Join(Environment.NewLine, entries
+            .OrderByDescending(entry => entry.Date)
+            .Select(entry => entry.Content));
 
         var sb = new StringBuilder();
         sb.Append("<p class=\"entries-navigation\">");

@@ -48,7 +48,8 @@ public record Generator(StaticSebugGeneratorOptions Settings)
         }
 
         // Now, create the linear archive - 5 entries per pag
-        var descendingBlogEntries = readBlogEntries.OrderByDescending(entry => entry.Date).ToList();
+        var descendingBlogEntries = readBlogEntries.OrderByDescending(entry => entry.Date)
+            .ToList();
         int entriesPerPage = 5;
         int pageNumber = 1;
         for (int i = 0; i < descendingBlogEntries.Count; i += entriesPerPage, pageNumber += 1)
