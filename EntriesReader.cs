@@ -18,7 +18,7 @@ public record BlogEntriesReader
             .Where(f => yearRegex.IsMatch(Path.GetFileName(f) ?? String.Empty))
             .Order();
         var monthRegex = new Regex("\\d{2}");
-        var dayFileRegex = new Regex("(\\d{2})\\.html");
+        var dayFileRegex = new Regex("(\\d{2})\\.html$");
         foreach (var year in years)
         {
             var months = Directory.EnumerateDirectories(year)
